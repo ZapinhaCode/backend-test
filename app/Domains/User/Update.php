@@ -65,6 +65,17 @@ class Update extends BaseDomain
         $this->email     = $email;
         $this->type      = $type;
 
+        /*
+            Talvez utilizar o para colocar strtolower
+            para o email para garantir que o mesmo seja sempre salvo em minúsculo e strtoupper para o type para sempre
+            gravar ele em maiúsculo.
+        */
+
+        /*
+            $this->email          = strtolower($email);
+            $this->type           = strtoupper($type);
+        */
+
         $this->cryptPassword($password);
     }
 
@@ -77,6 +88,21 @@ class Update extends BaseDomain
      */
     protected function cryptPassword(?string $password): void
     {
+        /*
+            Talvez da mesma forma de cadastrar a senha, para que ela seja atualizada colocar mais alguns critérios para
+            que ela seja mais forte
+
+            if (!is_null($password)) {
+                if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[0-9]/', $password)) {
+                    throw new InternalErrorException('A senha deve ter pelo menos 8 caracteres, incluir uma letra maiúscula e um número.', 0);
+                } else {
+                    $this->password = Hash::make($password);
+                }
+            } else {
+                $this->password = null;
+            }
+        */
+
         $this->password = !is_null($password) ? Hash::make($password) : null;
     }
 

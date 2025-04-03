@@ -66,8 +66,35 @@ class Create extends BaseDomain
         $this->email          = $email;
         $this->type           = $type;
 
+        /*
+            Talvez utilizar o para colocar strtolower
+            para o email para garantir que o mesmo seja sempre salvo em minúsculo e strtoupper para o type para sempre
+            gravar ele em maiúsculo.
+        */
+
+        /*
+            $this->email          = strtolower($email);
+            $this->type           = strtoupper($type);
+        */
+
         $this->cryptPassword($password);
     }
+
+    /*
+        Validar se a senha inserida é forte para melhorar a segurança do usuário, talvez implementar uma função
+        que valida isso da seguinte forma:
+
+        Aqui neste caso estou validando se a senha possui mais de 8 caracteres, se possui pelo menos uma letra maiúscula e
+        se a senha possui pelo menos um número
+
+        protected function validatePassword(string $password): void
+        {
+            if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[0-9]/', $password)) {
+                throw new InternalErrorException('A senha deve ter pelo menos 8 caracteres, incluir uma letra maiúscula e um número.', 0);
+            }
+        }
+    */
+
 
     /**
      * Encripta a senha
@@ -78,6 +105,14 @@ class Create extends BaseDomain
      */
     protected function cryptPassword(string $password): void
     {
+        /*
+            Dentro deste método adicionar uma verificação para garantir que a senha não seja null
+
+            if (empty($password)) {
+                throw new InternalErrorException('Senha não informada.', 0);
+            }
+        */
+
         $this->password = Hash::make($password);
     }
 
@@ -126,6 +161,17 @@ class Create extends BaseDomain
         }
     }
 
+    /*
+        Verificar se existe a companyId antes de criar o usuário
+
+        protected function checkCompany(): void
+        {
+            if (!Company::where('id', $this->companyId)->exists()) {
+                throw new InternalErrorException("Empresa não cadastrada.", 0);
+            }
+        }
+    */
+
     /**
      * Checa se é possível realizar a criação do usuário
      *
@@ -136,6 +182,12 @@ class Create extends BaseDomain
         $this->checkEmail();
         $this->checkDocumentNumber();
         $this->checkType();
+
+        /*
+            Chamar a verificação a função checkCompany e a validatePassword
+            $this->checkCompany();
+            $this->validatePassword();
+        */
 
         return $this;
     }

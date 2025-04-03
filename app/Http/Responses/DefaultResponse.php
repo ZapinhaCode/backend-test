@@ -46,6 +46,11 @@ class DefaultResponse
         if (count($errors)) {
             $this->parameters['errors'] = array_map(function ($error) {
                 if (!$error instanceof InternalError) {
+                    /*
+                        Ao invez lançar Exception talvez utilizar \InvalidArgumentException
+                        para ficar mais apropriado o erro deste tipo de dado
+                    */
+
                     throw new Exception('Error inserido não é do tipo InternalError');
                 }
 

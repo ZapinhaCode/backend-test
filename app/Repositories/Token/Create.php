@@ -41,6 +41,19 @@ class Create
      */
     public function handle(): string
     {
+        /*
+            Caso o usuário não foi encontrado gera uma uma exception para tratar este erro:
+
+            try {
+                $user = app($this->model)->findOrFail($this->id);
+            } catch (ModelNotFoundException $e) {
+                throw new TokenGenerationException("Usuário não encontrado para gerar token.", 404);
+            }
+
+            return $user->createToken(config('auth.token_name'), $this->permissions)
+                        ->plainTextToken;
+        */
+
         return app($this->model)
             ->findOrFail($this->id)
             ->createToken(config('auth.token_name'), $this->permissions)

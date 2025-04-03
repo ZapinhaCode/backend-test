@@ -61,6 +61,19 @@ class BasePolicy
      */
     protected function isOwnerResource(string $ownerResourceId): void
     {
+        /*
+            Adicionar mais um teste onde ele verifica se o usuário está autenticado, acrescetar isso ao if:
+
+            if (is_null(Auth::user()) $ownerResourceId !== Auth::id()) {
+                $this->deny(
+                    'UNAUTHORIZED',
+                    146001003,
+                    Auth::id(),
+                    'USER'
+                );
+            }
+        */
+
         if ($ownerResourceId !== Auth::id()) {
             $this->deny(
                 'UNAUTHORIZED',

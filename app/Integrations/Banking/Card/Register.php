@@ -60,6 +60,11 @@ class Register extends Gateway
      *
      * @return void
      */
+
+    /*
+        Esta função não está sendo chamada em nenhum lugar do código, para que ela seja executada precisamos chamá-la
+        na função handle()
+    */
     protected function findCardData(): void
     {
         $account = (new FindCardByUser($this->domain->userId))->handle();
@@ -81,6 +86,14 @@ class Register extends Gateway
      */
     protected function requestUrl(): string
     {
+        /*
+            Tratar caso o $this->externalAccountId ser null gerando erro na execução, montaria uma condição assim:
+
+            if (!isset($this->externalAccountId)) {
+                throw new \RuntimeException('O ID externo da conta não foi definido.');
+            }
+        */
+
         return "account/$this->externalAccountId/card";
     }
 
@@ -91,7 +104,37 @@ class Register extends Gateway
      */
     public function handle(): array
     {
+        /*
+          Montar neste handle() um try/catch para possua um tratamento para não ocorrer da aplicação cair
+
+            try {
+                $this->findAccountData();
+                $this->findUserCardData();
+
+                $request = $this->sendRequest(
+                    method: 'post',
+                    url:    $this->requestUrl(),
+                    action: 'REGISTER_CARD',
+                    params: $this->payload()
+                );
+
+                return $this->formatDetailsResponse($request);
+            } catch (\Throwable $e) {
+                \Log::error("Erro ao registrar cartão para a conta {$this->externalAccountId}: " . $e->getMessage());
+
+                return [
+                    'success' => false,
+                    'message' => 'Erro ao registrar cartão.',
+                    'error'   => $e->getMessage(),
+                ];
+            }
+        */
+
         $this->findAccountData();
+        /*
+            Chamada da função:
+            $this->findCardData();
+        */
 
         $url = $this->requestUrl();
 

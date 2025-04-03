@@ -133,6 +133,22 @@ class Handler extends ExceptionHandler
             );
         }
 
+        /*
+            O comando dump($exception); esta sendo imprimido diretamente na saída isso poderá causar vazamentos de informações,
+            talvez montar um Log::error neste caso. Algo assim:
+
+            Log::error('Erro interno no servidor', [
+                'message' => $exception->getMessage(),
+                'code'    => $exception->getCode(),
+                'file'    => $exception->getFile(),
+                'line'    => $exception->getLine(),
+                'route'   => optional($request->route())->uri(),
+                'method'  => $request->method(),
+                'params'  => $request->all(),
+                'trace'   => config('app.debug') ? $exception->getTraceAsString() : 'Oculto'
+            ]);
+        */
+
         dump($exception);
 
         $response = new DefaultResponse(

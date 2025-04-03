@@ -53,6 +53,18 @@ trait SanitizesInput
     {
         $filters = Arr::dot(Arr::only(Arr::undot($filters), array_keys($this->input())));
 
+        /*
+            Testar se o $filters não está vazio para evitar processamento desnecessário
+
+            if (empty($filters)) {
+                return; // Evita processamento desnecessário
+            }
+        */
+
+        /*
+            Aplicar um try/catch no Sanitizer::make() para poder receber dete trecho tratamentos para possíveis falhas
+        */
+
         $this->sanitizer = Sanitizer::make($this->input(), $filters);
 
         // Codigo para manter apenas os inputs pré existentes na request passados

@@ -140,6 +140,38 @@ class Gateway
             return;
         }
 
+        /*
+            Aplicar um tratamento de try/catch para caso ocorra um erro de autenticação do token,
+            gerando log para tratamento mais preciso
+
+            try {
+                $data = $this->newClient()
+                ->post(
+                    $this->getAuthUrl(),
+                    [
+                        'grant_type'    => 'client_credentials',
+                        'client_id'     => $this->getClientId(),
+                        'client_secret' => config('auth.banking_client_secret'),
+                    ]
+                )
+                ->json();
+
+                $token = $data['access_token'] ?? null;
+
+                if ($token !== null) {
+                    Cache::put('banking_authentication_token', $token, 180);
+                    $this->setAuthenticationToken($token);
+                }
+            } catch (\Throwable $e) {
+                \Log::error("Falha ao obter token de autenticação: " . $e->getMessage());
+                throw new BankingRequestException(
+                    message: 'Erro ao autenticar com o serviço BaaS',
+                    response: [],
+                    statusCode: 500,
+                );
+            }
+        */
+
         $data = $this->newClient()
             ->post(
                 $this->getAuthUrl(),
